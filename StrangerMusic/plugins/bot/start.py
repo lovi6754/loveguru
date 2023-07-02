@@ -41,10 +41,8 @@ async def start_comm(client, message: Message, _):
         name = message.text.split(None, 1)[1]
         if name[0:4] == "help":
             keyboard = help_pannel(_)
-            await message.reply_sticker("CAACAgUAAx0CbsiFZAABA62CZKEboYzL2JzDBBDhyERI04_U7BsAApcKAAKqgQlVNyMinMnL4VgeBA")
-            return await message.reply_photo(
-                       photo=config.START_IMG_URL,
-                       caption=_["help_1"], reply_markup=keyboard
+            return await message.reply_text(
+                _["help_1"], reply_markup=keyboard
             )
         if name[0:4] == "song":
             return await message.reply_text(_["song_2"])
